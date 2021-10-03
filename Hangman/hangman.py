@@ -8,7 +8,8 @@ print(
 print('HANGMAN')
 options = ['python', 'java', 'javascript', 'php']
 answer = random.choice(options)
-player_guess = input('Guess the word:')
+hint = answer[:3]
+player_guess = input('Guess the word {}:'.format(hint))
 if player_guess == answer:
     print('You survived!')
 else:
