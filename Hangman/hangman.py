@@ -1,10 +1,13 @@
+import random
+
 print(
     'HANGMAN \n'
     'The game will be available soon.'
 )
 
 print('HANGMAN')
-answer = 'python'
+options = ['python', 'java', 'javascript', 'php']
+answer = random.choice(options)
 player_guess = input('Guess the word:')
 if player_guess == answer:
     print('You survived!')
