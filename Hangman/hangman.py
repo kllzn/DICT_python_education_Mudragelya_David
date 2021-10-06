@@ -7,6 +7,16 @@ import random
 print('HANGMAN')
 
 
+def __menu__():
+    menu = input('Type "play" to play the game, "exit" to quit:')
+    if menu == "play":
+        main()
+    elif menu == "exit":
+        pass
+    else:
+        __menu__()
+
+
 def main():
 
     attempts = 8
@@ -54,21 +64,11 @@ def main():
     if done:
         print('You guessed the word {}!'.format(answer))
         print('You survived!')
+        __menu__()
     else:
         print('You lost!')
+        __menu__()
 
 
-main()
-
-# def __menu__():
-#     menu = input('Type "play" to play the game, "exit" to quit:')
-#     if menu == "play":
-#         main()
-#     elif menu == "exit":
-#         pass
-#     else:
-#         __menu__()
-#
-#
-# __menu__()
+__menu__()
 # возможно код отвратительный, но меня не было на лекции и хорошо, что он вообще работает и главное работает как надо
