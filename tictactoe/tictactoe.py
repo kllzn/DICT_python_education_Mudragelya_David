@@ -1,113 +1,136 @@
-cells = list(input("Enter cells: "))
-win = 0
+import random
+
+cells = {11: "_", 12: "_", 13: "_",
+         21: "_", 22: "_", 23: "_",
+         31: "_", 32: "_", 33: "_"}
+verify = 0
 
 
-def board():
-    print(f"""
-    |{cells[0]}{cells[1]}{cells[2]}|
-    |{cells[3]}{cells[4]}{cells[5]}|
-    |{cells[6]}{cells[7]}{cells[8]}|
-    """)
+def create_board():
+    print(f"""{'-' * 9}
+| {cells[11]} {cells[12]} {cells[13]} |
+| {cells[21]} {cells[22]} {cells[23]} |
+| {cells[31]} {cells[32]} {cells[33]} |
+{'-' * 9}
+""")
 
 
-board()
-
-
-def game():
+def winner():
+    global verify
     result = []
-    global win
-    if cells.count("X") - cells.count("O") >= 2 or cells.count("O") - cells.count("X") >= 2:
-        return "Impossible"
-    if cells[0] == cells[1] == cells[2] != "-":
-        result.append(cells[0])
-        win += 1
-    if cells[3] == cells[4] == cells[5] != "-":
-        result.append(cells[3])
-        win += 1
-    if cells[6] == cells[7] == cells[8] != "-":
-        result.append(cells[6])
-        win += 1
-    if cells[0] == cells[3] == cells[6] != "-":
-        result.append(cells[0])
-        win += 1
-    if cells[1] == cells[4] == cells[7] != "-":
-        result.append(cells[1])
-        win += 1
-    if cells[2] == cells[5] == cells[8] != "-":
-        result.append(cells[2])
-        win += 1
-    if len(result) >= 2:
-        return "Impossible"
+    list_cells = [value for value in cells.values()]
+    underline_amount = list_cells.count("_")
+    if cells[11] == cells[22] == cells[33] != "_":
+        result.append(cells[11])
+    if cells[13] == cells[22] == cells[31] != "_":
+        result.append(cells[13])
+    if cells[11] == cells[12] == cells[13] != "_":
+        result.append(cells[11])
+    if cells[21] == cells[22] == cells[23] != "_":
+        result.append(cells[21])
+    if cells[31] == cells[32] == cells[33] != "_":
+        result.append(cells[31])
+    if cells[11] == cells[21] == cells[31] != "_":
+        result.append(cells[11])
+    if cells[12] == cells[22] == cells[32] != "_":
+        result.append(cells[12])
+    if cells[13] == cells[23] == cells[33] != "_":
+        result.append(cells[13])
+    if result.count('X') >= 2:
+        result.remove('X')
+    if result.count('O') >= 2:
+        result.remove('O')
     if len(result) == 1:
-        return result[0] + " wins!"
-    if '_' in cells and len(result) == 0:
-        return "Game not finished"
-    elif '_' not in cells and len(result) == 0:
-        return "Draw"
+        verify += 1
+        print(f"{result[0]} wins!")
+    if "_" not in cells.values():
+        if underline_amount == 0:
+            verify += 1
+            print("Draw!")
 
 
-def turn():
-    while True:
+def turn_x():
+    global verify
+    while verify == 0:
         coords = list(input("Enter the coordinates:"))
-        x, y = str(coords[2]), str(coords[0])
-        if x.isalpha() or y.isalpha() or x == "" or y == "":
-            print("You should enter numbers!")
-        if int(x) not in range(3) or int(y) not in range(3):
-            print('Coordinates should be from 1 to 3!')
-        if y == "1":
-            if x == "1":
-                if cells[0] != "X" and cells[0] != "O":
-                    cells[0] = "X"
+        if len(coords) == 2:
+            if 48 <= ord(coords[0]) <= 57 or 48 <= ord(coords[1]) <= 57:
+                if int(coords[0]) in range(1, 4) and int(coords[1]) in range(1, 4):
+                    numbers = int("".join(str(i) for i in coords))
+                    if cells[numbers] == "_":
+                        cells[numbers] = "X"
+                        create_board()
+                        winner()
+                        break
+                    else:
+                        print("This cell is occupied! Choose another one!")
                 else:
-                    print("This cell is occupied! Choose another one!")
-            elif x == "2":
-                if cells[1] != "X" and cells[1] != "O":
-                    cells[1] = "X"
+                    print("Coordinates should be from 1 to 3!")
+            else:
+                print("You should enter numbers!")
+        elif len(coords) == 3:
+            coords.remove(" ")
+            if 48 <= ord(coords[0]) <= 57 or 48 <= ord(coords[1]) <= 57:
+                if int(coords[0]) in range(1, 4) and int(coords[1]) in range(1, 4):
+                    numbers = int("".join(str(i) for i in coords))
+                    if cells[numbers] == "_":
+                        cells[numbers] = "X"
+                        create_board()
+                        winner()
+                        break
+                    else:
+                        print("This cell is occupied! Choose another one!")
                 else:
-                    print("This cell is occupied! Choose another one!")
-            elif x == "3":
-                if cells[2] != "X" and cells[2] != "O":
-                    cells[2] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-        if y == "2":
-            if x == "1":
-                if cells[3] != "X" and cells[3] != "O":
-                    cells[3] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-            elif x == "2":
-                if cells[4] != "X" and cells[4] != "O":
-                    cells[4] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-            elif x == "3":
-                if cells[5] != "X" and cells[5] != "O":
-                    cells[5] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-        if y == "3":
-            if x == "1":
-                if cells[6] != "X" and cells[6] != "O":
-                    cells[6] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-            elif x == "2":
-                if cells[7] != "X" and cells[7] != "O":
-                    cells[7] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-            elif x == "3":
-                if cells[8] != "X" and cells[8] != "O":
-                    cells[8] = "X"
-                else:
-                    print("This cell is occupied! Choose another one!")
-        board()
-        game()
-        if win == 1:
-            break
-    board()
-    print(game())
+                    print("Coordinates should be from 1 to 3!")
+            else:
+                print("You should enter numbers!")
 
 
-turn()
+def turn_o():
+    global verify
+    while verify == 0:
+        coords = list(input("Enter the coordinates:"))
+        if len(coords) == 2:
+            if 48 <= ord(coords[0]) <= 57 or 48 <= ord(coords[1]) <= 57:
+                if int(coords[0]) in range(1, 4) and int(coords[1]) in range(1, 4):
+                    numbers = int("".join(str(i) for i in coords))
+                    if cells[numbers] == "_":
+                        cells[numbers] = "O"
+                        create_board()
+                        winner()
+                        break
+                    else:
+                        print("This cell is occupied! Choose another one!")
+                else:
+                    print("Coordinates should be from 1 to 3!")
+            else:
+                print("You should enter numbers!")
+        elif len(coords) == 3:
+            coords.remove(" ")
+            if 48 <= ord(coords[0]) <= 57 or 48 <= ord(coords[1]) <= 57:
+                if int(coords[0]) in range(1, 4) and int(coords[1]) in range(1, 4):
+                    numbers = int("".join(str(i) for i in coords))
+                    if cells[numbers] == "_":
+                        cells[numbers] = "O"
+                        create_board()
+                        winner()
+                        break
+                    else:
+                        print("This cell is occupied! Choose another one!")
+                else:
+                    print("Coordinates should be from 1 to 3!")
+            else:
+                print("You should enter numbers!")
+
+
+create_board()
+
+first_turn = random.randint(1,2)
+while verify != 1:
+    if first_turn == 1:
+        turn_x()
+        turn_o()
+    else:
+        turn_o()
+        turn_x()
+
